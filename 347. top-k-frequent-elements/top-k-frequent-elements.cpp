@@ -1,35 +1,39 @@
+#include <iostream>
 #include <vector>
+#include <string>
 #include <map>
 
 using namespace std;
 
 class Solution {
 public:
-    vector<int> topKFrequent(vector<int>& nums, int k) {
+    static vector<int> topKFrequent(vector<int>& nums, int k) {
+        vector<int> vec;
+
         map<int,int> map;
-        vector<int> kVec(k);
-        for(int x : nums) {
+        for(int x : nums)
             map[x]++;
-            int i = kVec.size()-1;
-            int j = i/2;
-            while(j != 0) {
-                if(map[x] > map[kVec[i]])
-                    i += j;
-                else
-                    i -= j;
-                j /= 2;
-            }
-            if(x == kVec[i] || map[x] < map[kVec[0]]) continue;
-            if(map[x] > map[kVec[i]]) i++;
-            kVec.insert(kVec.begin() + i, x);
-            if(kVec.size() > k) {
-                kVec.erase(kVec.begin());
+
+        vector<vector<int>> freq(nums.size()+1);
+        for (auto it = map.begin(); it != map.end(); ++it)
+            freq[it->second].push_back(it->first);
+
+        for(int i = freq.size()-1; i >= 0 ; i--) {
+            for(int j = 0; j < freq[i].size(); j++) {
+                vec.push_back(freq[i][j]);
+                if(vec.size() == k) return vec;
             }
         }
-        return kVec;
+        return vec;
     }
 };
 
+
+
 int main() {
-    
+    std::cout << "whoas" << std::endl;
+    vector<int> v = {1};
+    vector<int> res = Solution::topKFrequent(v, 1);
+    for(int x : res)
+        cout << x << ", ";
 }
